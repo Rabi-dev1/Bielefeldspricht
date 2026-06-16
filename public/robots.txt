@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /impressum
+Disallow: /datenschutz
+Disallow: /cookies
+Sitemap: https://bielefeldspricht.de/sitemap.xml
