@@ -38,11 +38,18 @@ const livePosts: Post[] = [
   },
 ];
 
+const FOLLOWED_HANDLES = new Set([
+  "@lena_bi", "@markus_brackwede", "@gruene_bi", "@arminia_bsc",
+  "@kemal_brackwede", "@nina_sennestadt", "@joellenbeck_bi", "@sparrenburg_bi",
+]);
+const USER_STADTTEIL = "Mitte";
+
 export default function HomePage() {
   const [posts, setPosts] = useState<Post[]>(feedPosts);
   const [pending, setPending] = useState<Post[]>([]);
   const [toast, setToast] = useState(false);
   const [newIds, setNewIds] = useState<Set<number>>(new Set());
+  const [tab, setTab] = useState<"fuer-dich" | "folge-ich" | "stadtteil">("fuer-dich");
 
   // Simulate incoming posts
   useEffect(() => {
@@ -114,15 +121,19 @@ export default function HomePage() {
 
         {/* Feed type tabs */}
         <div className="bg-white border-b border-gray-100 flex">
-          <button className="flex-1 py-3 text-sm font-semibold text-green-700 border-b-2 border-green-600 transition-colors">
-            Für dich
-          </button>
-          <button className="flex-1 py-3 text-sm font-medium text-gray-500 hover:bg-gray-50 border-b-2 border-transparent transition-colors">
-            Folge ich
-          </button>
-          <button className="flex-1 py-3 text-sm font-medium text-gray-500 hover:bg-gray-50 border-b-2 border-transparent transition-colors">
-            Stadtteil
-          </button>
+          {(["fuer-dich", "folge-ich", "stadtteil"] as const).map((t) => {
+            const labels = { "fuer-dich": "Für dich", "folge-ich": "Folge ich", "stadtteil": "Stadtteil" };
+            const active = tab === t;
+            return (
+              <button
+                key={t}
+                onClick={() => setTab(t)}
+                className={`flex-1 py-3 text-sm font-medium border-b-2 transition-colors ${active ? "font-semibold text-green-700 border-green-600" : "text-gray-500 hover:bg-gray-50 border-transparent"}`}
+              >
+                {labels[t]}
+              </button>
+            );
+          })}
         </div>
 
         {/* Composer */}
@@ -139,11 +150,29 @@ export default function HomePage() {
         )}
 
         {/* Feed */}
-        <div>
-          {posts.map((post) => (
-            <PostCard key={post.id} post={post} isNew={newIds.has(post.id)} />
-          ))}
-        </div>
+        {(() => {
+          const visible =
+            tab === "folge-ich" ? posts.filter((p) => FOLLOWED_HANDLES.has(p.handle))
+            : tab === "stadtteil" ? posts.filter((p) => p.stadtteil === USER_STADTTEIL)
+            : posts;
+          return (
+            <div>
+              {visible.map((post) => (
+                <PostCard key={post.id} post={post} isNew={newIds.has(post.id)} />
+              ))}
+              {visible.length === 0 && (
+                <div className="bg-white px-6 py-20 text-center">
+                  <p className="text-base font-semibold text-gray-700 mb-1">
+                    {tab === "folge-ich" ? "Noch keine gefolgten Beiträge" : `Noch keine Beiträge aus ${USER_STADTTEIL}`}
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    {tab === "folge-ich" ? "Folge mehr Personen, um ihre Beiträge hier zu sehen." : "Schreib den ersten Beitrag!"}
+                  </p>
+                </div>
+              )}
+            </div>
+          );
+        })()}
 
         {/* Load more */}
         <div className="bg-white py-8 text-center border-b border-gray-100">

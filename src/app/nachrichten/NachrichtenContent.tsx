@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
-import { X, Check } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { X, Send } from "lucide-react";
 
 interface Conversation {
   id: number;
@@ -25,15 +25,46 @@ const initial: Conversation[] = [
   { id: 8, name: "Jöllenbecker Nachbarschaft", handle: "@joellenbeck_bi", initials: "JN", color: "bg-indigo-500", lastMessage: "Danke für deine Teilnahme an der Abstimmung 🙏", time: "Mo.", unread: 0 },
 ];
 
+interface Message { from: "them" | "me"; text: string; }
+
 export default function NachrichtenContent() {
   const [conversations, setConversations] = useState(initial);
   const [query, setQuery] = useState("");
   const [openId, setOpenId] = useState<number | null>(null);
+  const [messages, setMessages] = useState<Record<number, Message[]>>({});
+  const [draft, setDraft] = useState("");
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   function openConversation(id: number) {
     setConversations((prev) => prev.map((c) => (c.id === id ? { ...c, unread: 0 } : c)));
     setOpenId(id);
+    setDraft("");
   }
+
+  function sendMessage(e: React.FormEvent) {
+    e.preventDefault();
+    const text = draft.trim();
+    if (!text || !openId) return;
+    setMessages((prev) => ({
+      ...prev,
+      [openId]: [...(prev[openId] ?? []), { from: "me", text }],
+    }));
+    setDraft("");
+    // Simulate a reply after 1.5s
+    const conv = conversations.find((c) => c.id === openId);
+    if (conv) {
+      setTimeout(() => {
+        setMessages((prev) => ({
+          ...prev,
+          [openId]: [...(prev[openId] ?? []), { from: "them", text: "Danke für deine Nachricht! 🙏" }],
+        }));
+      }, 1500);
+    }
+  }
+
+  useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  }, [messages, openId]);
 
   function markAllRead() {
     setConversations((prev) => prev.map((c) => ({ ...c, unread: 0 })));
@@ -140,7 +171,8 @@ export default function NachrichtenContent() {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-gray-50">
+            <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-gray-50">
+              {/* Initial message from them */}
               <div className="flex justify-start">
                 <div className="bg-white border border-gray-100 rounded-2xl rounded-tl-sm px-3 py-2 text-sm text-gray-700 max-w-[75%] shadow-sm">
                   {active.lastMessage}
@@ -151,15 +183,25 @@ export default function NachrichtenContent() {
                   Hi {active.name.split(" ")[0]}, danke für die Nachricht! 👍
                 </div>
               </div>
+              {/* Dynamic messages */}
+              {(messages[active.id] ?? []).map((m, i) => (
+                <div key={i} className={`flex ${m.from === "me" ? "justify-end" : "justify-start"}`}>
+                  <div className={`rounded-2xl px-3 py-2 text-sm max-w-[75%] shadow-sm ${m.from === "me" ? "bg-green-600 text-white rounded-tr-sm" : "bg-white border border-gray-100 text-gray-700 rounded-tl-sm"}`}>
+                    {m.text}
+                  </div>
+                </div>
+              ))}
             </div>
-            <form onSubmit={(e) => e.preventDefault()} className="flex items-center gap-2 px-4 py-3 border-t border-gray-100">
+            <form onSubmit={sendMessage} className="flex items-center gap-2 px-4 py-3 border-t border-gray-100">
               <input
                 type="text"
+                value={draft}
+                onChange={(e) => setDraft(e.target.value)}
                 placeholder="Nachricht schreiben …"
                 className="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-green-400"
               />
-              <button type="submit" className="bg-green-600 text-white p-2 rounded-full hover:bg-green-700 active:scale-90 transition-all">
-                <Check className="w-5 h-5" />
+              <button type="submit" disabled={!draft.trim()} className="bg-green-600 text-white p-2 rounded-full hover:bg-green-700 active:scale-90 disabled:opacity-40 transition-all">
+                <Send className="w-4 h-4" />
               </button>
             </form>
           </div>

@@ -114,15 +114,15 @@ export default function Sidebar() {
 
         {/* User */}
         <div className="mt-4 pt-4 border-t border-gray-100">
-          <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors">
+          <Link href="/profil" className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-colors group">
             <div className="w-9 h-9 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-sm shrink-0">
               Du
             </div>
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               <div className="text-sm font-semibold text-gray-900 truncate">@du_aus_bielefeld</div>
               <div className="text-xs text-gray-400">42 Follower · 18 Beiträge</div>
             </div>
-          </div>
+          </Link>
         </div>
       </aside>
 
