@@ -1,48 +1,50 @@
-import type { Metadata } from 'next'
-import './globals.css'
-import Navigation from '@/components/Navigation'
-import Footer from '@/components/Footer'
+import type { Metadata } from "next";
+import "./globals.css";
+import Sidebar from "@/components/Sidebar";
 
 export const metadata: Metadata = {
-  title: { template: '%s | Bielefeld spricht', default: 'Bielefeld spricht – Deine Stimme für deine Stadt' },
-  description: 'Die Plattform für Bürger Bielefelds. Melde Probleme, diskutiere Themen und stimme über lokale Entscheidungen ab.',
-  openGraph: {
-    title: 'Bielefeld spricht',
-    description: 'Bürgerbeteiligung für Bielefeld',
-    locale: 'de_DE',
-    type: 'website',
-    url: 'https://bielefeldspricht.de',
+  metadataBase: new URL("https://bielefeldspricht.de"),
+  title: {
+    default: "Bielefeld spricht — Die lokale Community für Bielefeld",
+    template: "%s | Bielefeld spricht",
   },
-  alternates: { canonical: 'https://bielefeldspricht.de' },
-}
+  description:
+    "Die lokale Social-Media-Plattform für Bielefeld. Poste, diskutiere und gestalte deine Stadt mit.",
+  openGraph: {
+    type: "website",
+    locale: "de_DE",
+    url: "https://bielefeldspricht.de",
+    siteName: "Bielefeld spricht",
+  },
+  robots: { index: true, follow: true },
+};
 
 const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'LocalBusiness',
-  name: 'Bielefeld spricht',
-  description: 'Digitale Bürgerbeteiligungsplattform für Bielefeld',
-  url: 'https://bielefeldspricht.de',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: 'Alter Markt 1',
-    addressLocality: 'Bielefeld',
-    postalCode: '33602',
-    addressCountry: 'DE',
-  },
-}
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Bielefeld spricht",
+  url: "https://bielefeldspricht.de",
+  description: "Lokale Community-Plattform für Bielefeld",
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="de">
-      <body>
+      <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <Navigation />
-        <main>{children}</main>
-        <Footer />
+      </head>
+      <body className="bg-gray-100 min-h-screen">
+        <div className="max-w-screen-xl mx-auto flex">
+          <Sidebar />
+          {/* Main content — offset for sidebar */}
+          <div className="flex-1 md:ml-64 xl:ml-72 flex justify-center pb-20 md:pb-0">
+            {children}
+          </div>
+        </div>
       </body>
     </html>
-  )
+  );
 }

@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import PollCard from '@/components/PollCard'
 import { polls } from '@/lib/data'
+import RightPanel from '@/components/RightPanel'
 
 export const metadata: Metadata = {
-  title: 'Abstimmungen',
-  description: 'Stimme über aktuelle Themen in Bielefeld ab. Deine Meinung zu Verkehr, Stadtentwicklung und mehr.',
+  title: 'Veranstaltungen & Abstimmungen',
+  description: 'Stimme über aktuelle Themen in Bielefeld ab.',
 }
 
 export default function AbstimmungenPage() {
@@ -12,31 +13,30 @@ export default function AbstimmungenPage() {
   const completedPolls = polls.filter(p => !p.active)
 
   return (
-    <div className="min-h-screen bg-[#f8f4ef]">
-      <div className="bg-[#1a3a5c] text-white py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="font-serif text-4xl font-bold mb-3">Aktuelle Abstimmungen</h1>
-          <p className="text-blue-200 text-lg">Deine Meinung zu lokalen Entscheidungen in Bielefeld</p>
+    <div className="flex gap-6 w-full max-w-4xl px-0 sm:px-4 py-0 sm:py-6">
+      <div className="flex-1 min-w-0">
+        <div className="bg-white border-b border-gray-200 px-4 py-3 sticky top-0 z-30 bg-white/95 backdrop-blur-sm">
+          <h1 className="font-bold text-gray-900 text-lg">Veranstaltungen & Abstimmungen</h1>
+          <p className="text-sm text-gray-400">Deine Meinung zu lokalen Themen</p>
         </div>
-      </div>
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-        <section className="mb-16">
-          <h2 className="font-serif text-2xl font-bold text-[#1a3a5c] mb-6">Laufende Abstimmungen</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {activePolls.map(poll => <PollCard key={poll.id} poll={poll} />)}
-          </div>
-        </section>
-
-        {completedPolls.length > 0 && (
+        <div className="bg-white min-h-screen px-4 py-5 space-y-8">
           <section>
-            <h2 className="font-serif text-2xl font-bold text-[#1a3a5c] mb-6">Abgeschlossene Abstimmungen</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              {completedPolls.map(poll => <PollCard key={poll.id} poll={poll} />)}
+            <h2 className="font-semibold text-gray-700 text-sm uppercase tracking-wide mb-4">Laufende Abstimmungen</h2>
+            <div className="space-y-4">
+              {activePolls.map(poll => <PollCard key={poll.id} poll={poll} />)}
             </div>
           </section>
-        )}
+          {completedPolls.length > 0 && (
+            <section>
+              <h2 className="font-semibold text-gray-700 text-sm uppercase tracking-wide mb-4">Abgeschlossene Abstimmungen</h2>
+              <div className="space-y-4 opacity-75">
+                {completedPolls.map(poll => <PollCard key={poll.id} poll={poll} />)}
+              </div>
+            </section>
+          )}
+        </div>
       </div>
+      <RightPanel />
     </div>
   )
 }
