@@ -9,13 +9,15 @@ import {
 const navItems = [
   { href: "/", icon: Home, label: "Startseite" },
   { href: "/entdecken", icon: Hash, label: "Entdecken" },
-  { href: "/benachrichtigungen", icon: Bell, label: "Benachrichtigungen" },
-  { href: "/nachrichten", icon: Mail, label: "Nachrichten" },
+  { href: "/benachrichtigungen", icon: Bell, label: "Benachrichtigungen", badge: 4 },
+  { href: "/nachrichten", icon: Mail, label: "Nachrichten", badge: 3 },
   { href: "/gespeichert", icon: Bookmark, label: "Gespeichert" },
   { href: "/themen", icon: Radio, label: "Kanäle" },
-  { href: "/abstimmungen", icon: Calendar, label: "Veranstaltungen" },
+  { href: "/abstimmungen", icon: Calendar, label: "Abstimmungen" },
   { href: "/ueber-uns", icon: Info, label: "Bürgerinfo" },
 ];
+
+const mobileNav = navItems.slice(0, 5);
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -23,34 +25,46 @@ export default function Sidebar() {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex flex-col fixed left-0 top-0 h-full w-64 xl:w-72 bg-white border-r border-gray-200 px-4 py-5 z-40">
+      <aside className="hidden md:flex flex-col fixed left-0 top-0 h-full w-64 xl:w-72 bg-white border-r border-gray-100 px-4 py-5 z-40">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 px-3 mb-6">
-          <div className="w-9 h-9 bg-green-600 rounded-xl flex items-center justify-center">
+        <Link href="/" className="flex items-center gap-2.5 px-3 mb-7 group">
+          <div className="w-9 h-9 bg-green-600 rounded-xl flex items-center justify-center group-hover:bg-green-700 transition-colors">
             <Leaf className="w-5 h-5 text-white" />
           </div>
           <div>
             <div className="font-bold text-gray-900 text-sm leading-tight">Bielefeld</div>
-            <div className="text-green-600 font-semibold text-xs">spricht.</div>
+            <div className="text-green-600 font-bold text-xs tracking-wide">spricht.</div>
           </div>
         </Link>
 
         {/* Nav */}
-        <nav className="flex flex-col gap-1 flex-1">
-          {navItems.map(({ href, icon: Icon, label }) => {
+        <nav className="flex flex-col gap-0.5 flex-1">
+          {navItems.map(({ href, icon: Icon, label, badge }) => {
             const active = pathname === href;
             return (
               <Link
                 key={href}
                 href={href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-[15px] font-medium transition-all active:scale-95 ${
                   active
-                    ? "bg-green-50 text-green-700"
-                    : "text-gray-700 hover:bg-gray-100"
+                    ? "bg-green-50 text-green-700 font-semibold"
+                    : "text-gray-700 hover:bg-gray-50"
                 }`}
               >
-                <Icon className={`w-5 h-5 ${active ? "text-green-600" : "text-gray-500"}`} />
+                <div className="relative">
+                  <Icon className={`w-[22px] h-[22px] ${active ? "text-green-600" : "text-gray-500"}`} />
+                  {badge && !active && (
+                    <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-green-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                      {badge}
+                    </span>
+                  )}
+                </div>
                 {label}
+                {badge && !active && (
+                  <span className="ml-auto text-[11px] font-bold text-white bg-green-600 px-1.5 py-0.5 rounded-full">
+                    {badge}
+                  </span>
+                )}
               </Link>
             );
           })}
@@ -58,23 +72,23 @@ export default function Sidebar() {
 
         {/* Post button */}
         <div className="mt-4">
-          <Link
-            href="/melden"
-            className="flex items-center justify-center gap-2 w-full bg-green-600 text-white font-semibold py-3 rounded-xl hover:bg-green-700 transition-colors text-sm"
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="flex items-center justify-center gap-2 w-full bg-green-600 text-white font-bold py-3 rounded-xl hover:bg-green-700 active:scale-95 transition-all text-sm shadow-sm"
           >
             <PenSquare className="w-4 h-4" />
             Beitrag schreiben
-          </Link>
+          </button>
         </div>
 
         {/* User */}
         <div className="mt-4 pt-4 border-t border-gray-100">
-          <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-gray-50 cursor-pointer">
-            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-green-700 font-bold text-xs">
+          <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors">
+            <div className="w-9 h-9 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-sm">
               Du
             </div>
             <div>
-              <div className="text-xs font-semibold text-gray-900">@du_aus_bielefeld</div>
+              <div className="text-sm font-semibold text-gray-900">@du_aus_bielefeld</div>
               <div className="text-xs text-gray-400">Mitglied seit 2026</div>
             </div>
           </div>
@@ -82,29 +96,39 @@ export default function Sidebar() {
       </aside>
 
       {/* Mobile bottom nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex items-center justify-around px-2 py-2 z-40">
-        {navItems.slice(0, 5).map(({ href, icon: Icon, label }) => {
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 flex items-center px-1 pb-safe z-40 shadow-[0_-1px_12px_rgba(0,0,0,0.06)]">
+        {mobileNav.map(({ href, icon: Icon, label, badge }) => {
           const active = pathname === href;
           return (
             <Link
               key={href}
               href={href}
-              className={`flex flex-col items-center gap-0.5 p-2 rounded-lg ${
+              className={`flex flex-col items-center gap-0.5 flex-1 py-3 px-1 rounded-xl transition-all active:scale-90 ${
                 active ? "text-green-600" : "text-gray-400"
               }`}
             >
-              <Icon className="w-5 h-5" />
-              <span className="text-[10px]">{label}</span>
+              <div className="relative">
+                <Icon className={`w-[22px] h-[22px] ${active ? "stroke-[2.5]" : ""}`} />
+                {badge && (
+                  <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-green-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                    {badge}
+                  </span>
+                )}
+              </div>
+              <span className={`text-[10px] font-medium ${active ? "font-semibold" : ""}`}>{label}</span>
             </Link>
           );
         })}
-        <Link
-          href="/melden"
-          className="flex flex-col items-center gap-0.5 p-2 rounded-lg text-green-600"
+        {/* Floating post button */}
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="flex flex-col items-center gap-0.5 flex-1 py-3 px-1 text-green-600 active:scale-90 transition-all"
         >
-          <PenSquare className="w-5 h-5" />
-          <span className="text-[10px]">Posten</span>
-        </Link>
+          <div className="w-[38px] h-[38px] bg-green-600 rounded-full flex items-center justify-center shadow-md -mt-4">
+            <PenSquare className="w-4 h-4 text-white" />
+          </div>
+          <span className="text-[10px] font-medium text-green-600 mt-0.5">Posten</span>
+        </button>
       </nav>
     </>
   );

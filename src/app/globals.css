@@ -30,14 +30,56 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 4px;
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+
+/* Heart pop animation */
+@keyframes heart-pop {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.45); }
+  60%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
 }
-::-webkit-scrollbar-track {
-  background: transparent;
+
+/* Number counter bump */
+@keyframes count-bump {
+  0%   { transform: translateY(0); opacity: 1; }
+  40%  { transform: translateY(-6px); opacity: 0; }
+  60%  { transform: translateY(6px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
 }
-::-webkit-scrollbar-thumb {
-  background: #d1d5db;
-  border-radius: 4px;
+
+/* Toast slide-in from top */
+@keyframes toast-in {
+  from { transform: translate(-50%, -120%); opacity: 0; }
+  to   { transform: translate(-50%, 0); opacity: 1; }
 }
+
+/* New-posts banner bounce */
+@keyframes banner-drop {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* Feed item enter */
+@keyframes post-enter {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Ripple on tap */
+@keyframes ripple {
+  from { transform: scale(0); opacity: .35; }
+  to   { transform: scale(2.5); opacity: 0; }
+}
+
+.animate-heart-pop  { animation: heart-pop .35s cubic-bezier(.36,.07,.19,.97) forwards; }
+.animate-count-bump { animation: count-bump .28s ease forwards; }
+.animate-toast-in   { animation: toast-in .3s cubic-bezier(.22,1,.36,1) forwards; }
+.animate-banner-drop{ animation: banner-drop .35s cubic-bezier(.22,1,.36,1) forwards; }
+.animate-post-enter { animation: post-enter .3s ease forwards; }
+
+/* Active press feel on mobile */
+button, a { -webkit-tap-highlight-color: transparent; }
