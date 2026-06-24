@@ -5,8 +5,7 @@ import PostCard from "@/components/PostCard";
 import RightPanel from "@/components/RightPanel";
 import { feedPosts, Post } from "@/lib/posts";
 
-// Simulated incoming posts that trickle in after load
-const incomingPosts: Post[] = [
+const livePosts: Post[] = [
   {
     id: 900,
     author: "Fahrrad Bielefeld e.V.",
@@ -15,7 +14,7 @@ const incomingPosts: Post[] = [
     avatarColor: "bg-lime-600",
     time: "Gerade eben",
     stadtteil: "Jöllenbeck",
-    content: "🚴‍♀️ Radtour entlang des Teutoburger Walds — Sonntag 9 Uhr ab Kesselbrink. Alle Level willkommen, Helm pflicht! Meldet euch hier an.",
+    content: "🚴‍♀️ Sonntagsausfahrt entlang des Teutoburger Walds — morgen 9 Uhr ab Kesselbrink. Alle Level willkommen, Helm Pflicht! Schreibt gerne in die Kommentare ob ihr dabei seid.",
     comments: 5,
     reposts: 11,
     likes: 34,
@@ -24,55 +23,41 @@ const incomingPosts: Post[] = [
   },
   {
     id: 901,
-    author: "Bielefeld Spielt",
-    handle: "@bielefeld_spielt",
-    avatarInitials: "BP",
-    avatarColor: "bg-yellow-500",
+    author: "Tanja R.",
+    handle: "@tanja_r_bi",
+    avatarInitials: "TR",
+    avatarColor: "bg-rose-400",
     time: "Gerade eben",
     stadtteil: "Altstadt",
-    content: "🎲 Das große Bürger-Spielfest kehrt zurück! 5. Juli am Alten Markt. Brett- und Kartenspiele für alle Altersgruppen. Freier Eintritt!",
-    comments: 8,
-    reposts: 19,
-    likes: 61,
-    category: "Veranstaltung",
-    hashtags: ["#Bielefeld", "#Stadtfest2026"],
+    content: "Unpopular opinion: Bielefeld ist die unterschätzteste Stadt Deutschlands. Leute, die noch nie hier waren, stellen sich eine graue Industriestadt vor. Dabei ist es hier wunderschön! 🏰🌳\n\nWer stimmt zu?",
+    comments: 38,
+    reposts: 29,
+    likes: 187,
+    category: "Diskussion",
+    hashtags: ["#Bielefeld", "#Heimatliebe"],
   },
 ];
 
 export default function HomePage() {
   const [posts, setPosts] = useState<Post[]>(feedPosts);
-  const [newPosts, setNewPosts] = useState<Post[]>([]);
+  const [pending, setPending] = useState<Post[]>([]);
   const [toast, setToast] = useState(false);
   const [newIds, setNewIds] = useState<Set<number>>(new Set());
-  const [loadCount, setLoadCount] = useState(0);
 
-  // Older posts that load when "Weitere Beiträge laden" is clicked
-  function loadMore() {
-    const older: Post[] = feedPosts.slice(0, 6).map((p, i) => ({
-      ...p,
-      id: 1000 + loadCount * 100 + i,
-      time: "Vor 1 Tag",
-    }));
-    setPosts((prev) => [...prev, ...older]);
-    setLoadCount((c) => c + 1);
-  }
-
-  // Simulate incoming posts after a delay
+  // Simulate incoming posts
   useEffect(() => {
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    incomingPosts.forEach((p, i) => {
-      timers.push(setTimeout(() => {
-        setNewPosts(prev => [p, ...prev]);
-      }, 18000 + i * 25000));
-    });
+    const timers = livePosts.map((p, i) =>
+      setTimeout(() => setPending((prev) => [p, ...prev]), 20_000 + i * 30_000)
+    );
     return () => timers.forEach(clearTimeout);
   }, []);
 
-  function loadNewPosts() {
-    const ids = new Set(newPosts.map(p => p.id));
+  function flushPending() {
+    const ids = new Set(pending.map((p) => p.id));
     setNewIds(ids);
-    setPosts(prev => [...newPosts, ...prev]);
-    setNewPosts([]);
+    setPosts((prev) => [...pending, ...prev]);
+    setPending([]);
+    window.scrollTo({ top: 0, behavior: "smooth" });
     setTimeout(() => setNewIds(new Set()), 800);
   }
 
@@ -91,45 +76,69 @@ export default function HomePage() {
       likes: 0,
       category: "Community",
     };
-    const id = newPost.id;
-    setNewIds(new Set([id]));
-    setPosts(prev => [newPost, ...prev]);
+    setNewIds(new Set([newPost.id]));
+    setPosts((prev) => [newPost, ...prev]);
     setToast(true);
-    setTimeout(() => setToast(false), 3000);
+    setTimeout(() => setToast(false), 3500);
     setTimeout(() => setNewIds(new Set()), 600);
+  }
+
+  function loadMore() {
+    const older = feedPosts.slice(0, 8).map((p, i) => ({
+      ...p,
+      id: 2000 + posts.length + i,
+      time: "Vor 2 Tagen",
+    }));
+    setPosts((prev) => [...prev, ...older]);
   }
 
   return (
     <div className="flex gap-6 w-full max-w-4xl px-0 sm:px-4 py-0 sm:py-6">
       <div className="flex-1 min-w-0">
+
         {/* Toast */}
         {toast && (
-          <div className="fixed top-4 left-1/2 z-50 animate-toast-in bg-green-600 text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-xl flex items-center gap-2">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+          <div className="fixed top-4 left-1/2 z-50 animate-toast-in bg-green-600 text-white text-sm font-semibold px-5 py-3 rounded-full shadow-xl flex items-center gap-2 pointer-events-none">
+            <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
             Beitrag erfolgreich geteilt!
           </div>
         )}
 
-        {/* Feed header */}
+        {/* Header */}
         <div className="bg-white border-b border-gray-100 px-4 py-3 sticky top-0 z-30 backdrop-blur-md bg-white/90">
           <h1 className="font-bold text-gray-900 text-lg">Startseite</h1>
           <p className="text-sm text-gray-400">Was bewegt Bielefeld heute?</p>
         </div>
 
+        {/* Feed type tabs */}
+        <div className="bg-white border-b border-gray-100 flex">
+          <button className="flex-1 py-3 text-sm font-semibold text-green-700 border-b-2 border-green-600 transition-colors">
+            Für dich
+          </button>
+          <button className="flex-1 py-3 text-sm font-medium text-gray-500 hover:bg-gray-50 border-b-2 border-transparent transition-colors">
+            Folge ich
+          </button>
+          <button className="flex-1 py-3 text-sm font-medium text-gray-500 hover:bg-gray-50 border-b-2 border-transparent transition-colors">
+            Stadtteil
+          </button>
+        </div>
+
         {/* Composer */}
         <PostComposer onPost={addPost} />
 
-        {/* "New posts" live banner */}
-        {newPosts.length > 0 && (
+        {/* New posts banner */}
+        {pending.length > 0 && (
           <button
-            onClick={loadNewPosts}
-            className="w-full py-3 text-sm font-semibold text-green-600 bg-green-50 border-b border-green-100 hover:bg-green-100 transition-colors animate-banner-drop"
+            onClick={flushPending}
+            className="w-full py-3 text-sm font-semibold text-green-600 bg-green-50 border-b border-green-100 hover:bg-green-100 active:bg-green-200 transition-colors animate-banner-drop"
           >
-            ↑ {newPosts.length} neue Beiträge anzeigen
+            ↑ {pending.length} {pending.length === 1 ? "neuer Beitrag" : "neue Beiträge"} — anzeigen
           </button>
         )}
 
-        {/* Posts */}
+        {/* Feed */}
         <div>
           {posts.map((post) => (
             <PostCard key={post.id} post={post} isNew={newIds.has(post.id)} />
@@ -137,10 +146,10 @@ export default function HomePage() {
         </div>
 
         {/* Load more */}
-        <div className="bg-white py-6 text-center border-b border-gray-100">
+        <div className="bg-white py-8 text-center border-b border-gray-100">
           <button
             onClick={loadMore}
-            className="text-sm text-green-600 font-semibold hover:text-green-700 transition-colors active:scale-95"
+            className="text-sm text-green-600 font-semibold hover:text-green-700 active:scale-95 transition-all px-6 py-2 border border-green-300 rounded-full hover:bg-green-50"
           >
             Weitere Beiträge laden
           </button>

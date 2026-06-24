@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Home, Hash, Bell, Mail, Bookmark,
-  Radio, Calendar, Info, PenSquare, Leaf
+  Radio, Calendar, Info, PenSquare
 } from "lucide-react";
 
 const navItems = [
@@ -19,21 +19,64 @@ const navItems = [
 
 const mobileNav = navItems.slice(0, 5);
 
+// Custom Sparrenburg + speech bubble logo
+function BielefeldLogo({ size = 40 }: { size?: number }) {
+  return (
+    <div
+      style={{ width: size, height: size }}
+      className="bg-stone-600 rounded-xl flex items-center justify-center shadow-md shrink-0"
+    >
+      <svg
+        width={size * 0.75}
+        height={size * 0.75}
+        viewBox="0 0 30 30"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {/* Merlons / battlements */}
+        <rect x="1.5" y="2" width="4" height="5.5" rx="0.6" stroke="#d6cfc5" strokeWidth="1.7" />
+        <rect x="7.5" y="2" width="4" height="5.5" rx="0.6" stroke="#d6cfc5" strokeWidth="1.7" />
+        {/* Tower body */}
+        <rect x="1.5" y="6" width="14" height="21" rx="0" stroke="#d6cfc5" strokeWidth="1.7" fill="none" />
+        {/* Arched door */}
+        <path d="M6 27 V21 Q8.75 17.5 11.5 21 V27" stroke="#d6cfc5" strokeWidth="1.4" fill="none" strokeLinecap="round" />
+        {/* Speech bubble: fill with same bg color to "cut" through tower outline */}
+        <circle cx="22" cy="11" r="8" fill="#78716c" />
+        {/* Speech bubble outline */}
+        <circle cx="22" cy="11" r="8" stroke="#d6cfc5" strokeWidth="1.7" fill="none" />
+        {/* Bubble tail */}
+        <path d="M16.5 16.5 L13 21.5 L19 18" fill="#d6cfc5" />
+      </svg>
+    </div>
+  );
+}
+
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  function goToComposer() {
+    if (pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      // focus the textarea after scroll
+      setTimeout(() => {
+        (document.querySelector("textarea") as HTMLTextAreaElement | null)?.focus();
+      }, 300);
+    } else {
+      router.push("/");
+    }
+  }
 
   return (
     <>
       {/* Desktop sidebar */}
       <aside className="hidden md:flex flex-col fixed left-0 top-0 h-full w-64 xl:w-72 bg-white border-r border-gray-100 px-4 py-5 z-40">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 px-3 mb-7 group">
-          <div className="w-9 h-9 bg-green-600 rounded-xl flex items-center justify-center group-hover:bg-green-700 transition-colors">
-            <Leaf className="w-5 h-5 text-white" />
-          </div>
+        <Link href="/" className="flex items-center gap-3 px-2 mb-7 group">
+          <BielefeldLogo size={42} />
           <div>
-            <div className="font-bold text-gray-900 text-sm leading-tight">Bielefeld</div>
-            <div className="text-green-600 font-bold text-xs tracking-wide">spricht.</div>
+            <div className="font-black text-gray-900 text-base leading-tight tracking-tight">BIELEFELD</div>
+            <div className="text-green-600 font-bold text-sm tracking-wide">spricht.</div>
           </div>
         </Link>
 
@@ -45,23 +88,23 @@ export default function Sidebar() {
               <Link
                 key={href}
                 href={href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-[15px] font-medium transition-all active:scale-95 ${
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-[15px] font-medium transition-all active:scale-[0.97] ${
                   active
                     ? "bg-green-50 text-green-700 font-semibold"
                     : "text-gray-700 hover:bg-gray-50"
                 }`}
               >
-                <div className="relative">
+                <div className="relative shrink-0">
                   <Icon className={`w-[22px] h-[22px] ${active ? "text-green-600" : "text-gray-500"}`} />
                   {badge && !active && (
-                    <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-green-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                    <span className="absolute -top-1.5 -right-1.5 w-[18px] h-[18px] bg-green-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
                       {badge}
                     </span>
                   )}
                 </div>
                 {label}
                 {badge && !active && (
-                  <span className="ml-auto text-[11px] font-bold text-white bg-green-600 px-1.5 py-0.5 rounded-full">
+                  <span className="ml-auto text-[11px] font-bold text-white bg-green-600 px-1.5 py-0.5 rounded-full leading-none">
                     {badge}
                   </span>
                 )}
@@ -70,11 +113,11 @@ export default function Sidebar() {
           })}
         </nav>
 
-        {/* Post button */}
+        {/* Compose button */}
         <div className="mt-4">
           <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="flex items-center justify-center gap-2 w-full bg-green-600 text-white font-bold py-3 rounded-xl hover:bg-green-700 active:scale-95 transition-all text-sm shadow-sm"
+            onClick={goToComposer}
+            className="flex items-center justify-center gap-2 w-full bg-green-600 text-white font-bold py-3 rounded-xl hover:bg-green-700 active:scale-[0.97] transition-all text-sm shadow-sm"
           >
             <PenSquare className="w-4 h-4" />
             Beitrag schreiben
@@ -84,48 +127,48 @@ export default function Sidebar() {
         {/* User */}
         <div className="mt-4 pt-4 border-t border-gray-100">
           <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors">
-            <div className="w-9 h-9 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-sm">
+            <div className="w-9 h-9 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-sm shrink-0">
               Du
             </div>
-            <div>
-              <div className="text-sm font-semibold text-gray-900">@du_aus_bielefeld</div>
-              <div className="text-xs text-gray-400">Mitglied seit 2026</div>
+            <div className="min-w-0">
+              <div className="text-sm font-semibold text-gray-900 truncate">@du_aus_bielefeld</div>
+              <div className="text-xs text-gray-400">42 Follower · 18 Beiträge</div>
             </div>
           </div>
         </div>
       </aside>
 
       {/* Mobile bottom nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 flex items-center px-1 pb-safe z-40 shadow-[0_-1px_12px_rgba(0,0,0,0.06)]">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 flex items-center px-1 z-40 shadow-[0_-1px_12px_rgba(0,0,0,0.06)]">
         {mobileNav.map(({ href, icon: Icon, label, badge }) => {
           const active = pathname === href;
           return (
             <Link
               key={href}
               href={href}
-              className={`flex flex-col items-center gap-0.5 flex-1 py-3 px-1 rounded-xl transition-all active:scale-90 ${
+              className={`flex flex-col items-center gap-0.5 flex-1 py-3 px-1 transition-all active:scale-90 ${
                 active ? "text-green-600" : "text-gray-400"
               }`}
             >
               <div className="relative">
                 <Icon className={`w-[22px] h-[22px] ${active ? "stroke-[2.5]" : ""}`} />
                 {badge && (
-                  <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-green-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1.5 -right-1.5 w-[16px] h-[16px] bg-green-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
                     {badge}
                   </span>
                 )}
               </div>
-              <span className={`text-[10px] font-medium ${active ? "font-semibold" : ""}`}>{label}</span>
+              <span className={`text-[10px] ${active ? "font-semibold" : "font-medium"}`}>{label}</span>
             </Link>
           );
         })}
-        {/* Floating post button */}
+        {/* Raised post button */}
         <button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="flex flex-col items-center gap-0.5 flex-1 py-3 px-1 text-green-600 active:scale-90 transition-all"
+          onClick={goToComposer}
+          className="flex flex-col items-center gap-0.5 flex-1 py-2 active:scale-90 transition-all"
         >
-          <div className="w-[38px] h-[38px] bg-green-600 rounded-full flex items-center justify-center shadow-md -mt-4">
-            <PenSquare className="w-4 h-4 text-white" />
+          <div className="w-[42px] h-[42px] bg-green-600 rounded-full flex items-center justify-center shadow-lg -mt-5 border-4 border-white">
+            <PenSquare className="w-[18px] h-[18px] text-white" />
           </div>
           <span className="text-[10px] font-medium text-green-600 mt-0.5">Posten</span>
         </button>

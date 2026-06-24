@@ -15,9 +15,9 @@ export default function AbstimmungenPage() {
   return (
     <div className="flex gap-6 w-full max-w-4xl px-0 sm:px-4 py-0 sm:py-6">
       <div className="flex-1 min-w-0">
-        <div className="bg-white border-b border-gray-200 px-4 py-3 sticky top-0 z-30 bg-white/95 backdrop-blur-sm">
-          <h1 className="font-bold text-gray-900 text-lg">Veranstaltungen & Abstimmungen</h1>
-          <p className="text-sm text-gray-400">Deine Meinung zu lokalen Themen</p>
+        <div className="bg-white border-b border-gray-100 px-4 py-3 sticky top-0 z-30 bg-white/90 backdrop-blur-md">
+          <h1 className="font-bold text-gray-900 text-lg">Abstimmungen</h1>
+          <p className="text-sm text-gray-400">Deine Stimme zählt in Bielefeld</p>
         </div>
         <div className="bg-white min-h-screen px-4 py-5 space-y-8">
           <section>

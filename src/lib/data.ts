@@ -159,6 +159,33 @@ export const polls: Poll[] = [
     deadline: "Abgestimmt",
     active: false,
   },
+  {
+    id: 5,
+    question: "Kostenloses WLAN in der gesamten Innenstadt?",
+    description: "Die Stadt prüft, ob öffentliche WLAN-Hotspots in der Innenstadt, am Kesselbrink und am Hauptbahnhof kostenlos bereitgestellt werden sollen.",
+    yesPercent: 88,
+    totalVotes: 412,
+    deadline: "noch 8 Tage",
+    active: true,
+  },
+  {
+    id: 6,
+    question: "Nachtbusse an Wochenenden bis 4 Uhr morgens?",
+    description: "Aktuell enden die Nachtbusse um 2 Uhr. Viele Bürger:innen wünschen sich eine Verlängerung bis 4 Uhr, besonders für Veranstaltungsbesucher.",
+    yesPercent: 82,
+    totalVotes: 278,
+    deadline: "noch 15 Tage",
+    active: true,
+  },
+  {
+    id: 7,
+    question: "Sollte die Sparrenburg dauerhaft beleuchtet werden?",
+    description: "Ein Vorschlag sieht vor, die Sparrenburg nachts mit umweltfreundlichem LED-Licht zu illuminieren — ähnlich wie Wahrzeichen in anderen Städten.",
+    yesPercent: 71,
+    totalVotes: 198,
+    deadline: "Abgestimmt",
+    active: false,
+  },
 ];
 
 export const categoryColors: Record<IssueCategory, string> = {
