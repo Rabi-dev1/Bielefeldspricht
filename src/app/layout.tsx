@@ -15,6 +15,11 @@ export const metadata: Metadata = {
     locale: "de_DE",
     url: "https://bielefeldspricht.de",
     siteName: "Bielefeld spricht",
+    images: ["/logo.png"],
+  },
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
   },
   robots: { index: true, follow: true },
 };

@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import {
   Home, Hash, Bell, Mail, Bookmark,
@@ -19,34 +20,21 @@ const navItems = [
 
 const mobileNav = navItems.slice(0, 5);
 
-// Custom Sparrenburg + speech bubble logo
-function BielefeldLogo({ size = 40 }: { size?: number }) {
+// Logo — uses the uploaded image at /public/logo.png
+function BielefeldLogo({ size = 42 }: { size?: number }) {
   return (
     <div
       style={{ width: size, height: size }}
-      className="bg-stone-600 rounded-xl flex items-center justify-center shadow-md shrink-0"
+      className="rounded-xl overflow-hidden shadow-md shrink-0 bg-stone-600"
     >
-      <svg
-        width={size * 0.75}
-        height={size * 0.75}
-        viewBox="0 0 30 30"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {/* Merlons / battlements */}
-        <rect x="1.5" y="2" width="4" height="5.5" rx="0.6" stroke="#d6cfc5" strokeWidth="1.7" />
-        <rect x="7.5" y="2" width="4" height="5.5" rx="0.6" stroke="#d6cfc5" strokeWidth="1.7" />
-        {/* Tower body */}
-        <rect x="1.5" y="6" width="14" height="21" rx="0" stroke="#d6cfc5" strokeWidth="1.7" fill="none" />
-        {/* Arched door */}
-        <path d="M6 27 V21 Q8.75 17.5 11.5 21 V27" stroke="#d6cfc5" strokeWidth="1.4" fill="none" strokeLinecap="round" />
-        {/* Speech bubble: fill with same bg color to "cut" through tower outline */}
-        <circle cx="22" cy="11" r="8" fill="#78716c" />
-        {/* Speech bubble outline */}
-        <circle cx="22" cy="11" r="8" stroke="#d6cfc5" strokeWidth="1.7" fill="none" />
-        {/* Bubble tail */}
-        <path d="M16.5 16.5 L13 21.5 L19 18" fill="#d6cfc5" />
-      </svg>
+      <Image
+        src="/logo.png"
+        alt="Bielefeld spricht Logo"
+        width={size}
+        height={size}
+        className="w-full h-full object-cover"
+        priority
+      />
     </div>
   );
 }
