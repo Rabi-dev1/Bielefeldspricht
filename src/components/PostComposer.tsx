@@ -1,38 +1,25 @@
 "use client";
 import { useState } from "react";
-import { Image, MapPin, Smile, X } from "lucide-react";
+import { Image, MapPin, Smile } from "lucide-react";
 
 const MAX = 280;
 
-export default function PostComposer() {
+interface Props {
+  onPost?: (content: string) => void;
+}
+
+export default function PostComposer({ onPost }: Props) {
   const [text, setText] = useState("");
-  const [posted, setPosted] = useState(false);
 
   function submit() {
     if (!text.trim()) return;
-    setPosted(true);
-    setTimeout(() => {
-      setPosted(false);
-      setText("");
-    }, 2500);
+    onPost?.(text.trim());
+    setText("");
   }
 
   const remaining = MAX - text.length;
   const over = remaining < 0;
   const nearLimit = remaining <= 20;
-
-  if (posted) {
-    return (
-      <div className="bg-white border-b border-gray-200 px-4 py-5 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-sm shrink-0">
-          Du
-        </div>
-        <div className="flex items-center gap-2 text-green-600">
-          <span className="text-sm font-medium">✓ Dein Beitrag wurde gepostet!</span>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="bg-white border-b border-gray-200 px-4 py-4">
