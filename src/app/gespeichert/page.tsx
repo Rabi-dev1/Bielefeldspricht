@@ -1,25 +1,21 @@
+import type { Metadata } from 'next'
 import RightPanel from '@/components/RightPanel'
+import GespeichertContent from './GespeichertContent'
 
-export default function Page() {
-  const titles: Record<string, string> = {
-    entdecken: 'Entdecken',
-    benachrichtigungen: 'Benachrichtigungen',
-    nachrichten: 'Nachrichten',
-    gespeichert: 'Gespeichert',
-  }
-  const label = 'gespeichert'
+export const metadata: Metadata = {
+  title: 'Gespeichert',
+  description: 'Deine gespeicherten Beiträge auf Bielefeld spricht.',
+}
+
+export default function GespeichertPage() {
   return (
     <div className="flex gap-6 w-full max-w-4xl px-0 sm:px-4 py-0 sm:py-6">
       <div className="flex-1 min-w-0">
-        <div className="bg-white border-b border-gray-200 px-4 py-3 sticky top-0 z-30">
-          <h1 className="font-bold text-gray-900 text-lg">{titles[label]}</h1>
+        <div className="bg-white border-b border-gray-100 px-4 py-3 sticky top-0 z-30 bg-white/90 backdrop-blur-md">
+          <h1 className="font-bold text-gray-900 text-lg">Gespeichert</h1>
+          <p className="text-sm text-gray-400">Beiträge, die du dir gemerkt hast</p>
         </div>
-        <div className="bg-white min-h-screen flex items-center justify-center">
-          <div className="text-center py-20 text-gray-400">
-            <p className="text-lg font-medium">Demnächst verfügbar</p>
-            <p className="text-sm mt-1">Diese Funktion wird bald freigeschaltet.</p>
-          </div>
-        </div>
+        <GespeichertContent />
       </div>
       <RightPanel />
     </div>

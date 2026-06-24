@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef } from "react";
-import { MessageCircle, Repeat2, Heart, Share, BadgeCheck } from "lucide-react";
+import { MessageCircle, Repeat2, Heart, Share, BadgeCheck, Bookmark } from "lucide-react";
 import { Post } from "@/lib/posts";
 
 const categoryColors: Record<string, string> = {
@@ -26,6 +26,7 @@ export default function PostCard({ post, isNew }: { post: Post; isNew?: boolean 
   const [reposts, setReposts] = useState(post.reposts);
   const [likeKey, setLikeKey] = useState(0);
   const [repostKey, setRepostKey] = useState(0);
+  const [saved, setSaved] = useState(false);
   const heartRef = useRef<SVGSVGElement>(null);
 
   function toggleLike() {
@@ -137,10 +138,22 @@ export default function PostCard({ post, isNew }: { post: Post; isNew?: boolean 
               </span>
             </button>
 
+            {/* Save / bookmark */}
+            <button
+              onClick={(e) => { e.stopPropagation(); setSaved(s => !s); }}
+              className={`flex items-center transition-colors group min-w-[44px] justify-center ${saved ? "text-green-600" : "text-gray-400 hover:text-green-600"}`}
+              aria-label="Speichern"
+            >
+              <span className="p-2 rounded-full group-hover:bg-green-50 group-active:scale-90 transition-all">
+                <Bookmark className={`w-[18px] h-[18px] ${saved ? "fill-green-600" : ""}`} />
+              </span>
+            </button>
+
             {/* Share */}
             <button
               className="flex items-center text-gray-400 hover:text-green-600 transition-colors group min-w-[44px] justify-end"
               onClick={e => e.stopPropagation()}
+              aria-label="Teilen"
             >
               <span className="p-2 rounded-full group-hover:bg-green-50 group-active:scale-90 transition-all">
                 <Share className="w-[18px] h-[18px]" />

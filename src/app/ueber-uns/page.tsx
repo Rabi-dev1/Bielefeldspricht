@@ -21,8 +21,8 @@ const team = [
 
 export default function UeberUnsPage() {
   return (
-    <div className="min-h-screen bg-[#f8f4ef]">
-      <div className="bg-[#1a3a5c] text-white py-20 px-4">
+    <div className="min-h-screen bg-[#f9fafb]">
+      <div className="bg-[#15803d] text-white py-20 px-4">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="font-serif text-5xl font-bold mb-5">Über Bielefeld spricht</h1>
           <p className="text-blue-200 text-xl leading-relaxed">
@@ -34,7 +34,7 @@ export default function UeberUnsPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16">
         {/* Mission */}
         <section className="mb-16">
-          <h2 className="font-serif text-3xl font-bold text-[#1a3a5c] mb-5">Unsere Mission</h2>
+          <h2 className="font-serif text-3xl font-bold text-[#15803d] mb-5">Unsere Mission</h2>
           <div className="space-y-4 text-gray-600 text-lg leading-relaxed">
             <p>Bielefeld spricht entstand aus der Überzeugung, dass lokale Demokratie funktioniert, wenn Bürgerinnen und Bürger eine einfache, zugängliche Möglichkeit haben, ihre Stimme zu erheben.</p>
             <p>Zu oft werden Probleme im Alltag ignoriert — nicht weil niemanden etwas stört, sondern weil der Weg zum Stadtbüro zu weit, das Formular zu kompliziert oder die Hürde zur Beteiligung zu hoch ist. Das wollen wir ändern.</p>
@@ -43,8 +43,8 @@ export default function UeberUnsPage() {
         </section>
 
         {/* Personas */}
-        <section className="mb-16 bg-white rounded-2xl p-8 shadow-sm border border-[#e8e0d5]">
-          <h2 className="font-serif text-3xl font-bold text-[#1a3a5c] mb-5">Entwickelt mit und für Bielefelder</h2>
+        <section className="mb-16 bg-white rounded-2xl p-8 shadow-sm border border-[#e5e7eb]">
+          <h2 className="font-serif text-3xl font-bold text-[#15803d] mb-5">Entwickelt mit und für Bielefelder</h2>
           <p className="text-gray-600 mb-6 leading-relaxed">
             Bielefeld spricht wurde nicht am grünen Tisch entwickelt. Wir haben uns Zeit genommen, echte Bielefelderinnen und Bielefelder zu befragen:
           </p>
@@ -55,9 +55,9 @@ export default function UeberUnsPage() {
               { name: 'Bette, 74', role: 'Rentnerin aus Schildesche', quote: '"Ich will gehört werden — auch ohne Computer-Kenntnisse."' },
               { name: 'Ralf, 55', role: 'Anwohner aus Brackwede', quote: '"Ich habe nie gedacht, dass meine Meinung etwas bewirken kann."' },
             ].map(p => (
-              <div key={p.name} className="bg-[#f8f4ef] rounded-xl p-4 border border-[#e8e0d5]">
+              <div key={p.name} className="bg-[#f9fafb] rounded-xl p-4 border border-[#e5e7eb]">
                 <p className="text-gray-700 italic mb-3 text-sm">{p.quote}</p>
-                <p className="font-semibold text-[#1a3a5c] text-sm">{p.name}</p>
+                <p className="font-semibold text-[#15803d] text-sm">{p.name}</p>
                 <p className="text-gray-500 text-xs">{p.role}</p>
               </div>
             ))}
@@ -66,15 +66,15 @@ export default function UeberUnsPage() {
 
         {/* Values */}
         <section className="mb-16">
-          <h2 className="font-serif text-3xl font-bold text-[#1a3a5c] mb-8">Unsere Werte</h2>
+          <h2 className="font-serif text-3xl font-bold text-[#15803d] mb-8">Unsere Werte</h2>
           <div className="grid sm:grid-cols-2 gap-6">
             {values.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="bg-white rounded-2xl p-6 shadow-sm border border-[#e8e0d5] flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-[#f0f4f8] rounded-xl flex items-center justify-center">
-                  <Icon className="w-6 h-6 text-[#1a3a5c]" />
+              <div key={title} className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e7eb] flex gap-4">
+                <div className="flex-shrink-0 w-12 h-12 bg-[#f0fdf4] rounded-xl flex items-center justify-center">
+                  <Icon className="w-6 h-6 text-[#15803d]" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-[#1a3a5c] mb-1">{title}</h3>
+                  <h3 className="font-semibold text-[#15803d] mb-1">{title}</h3>
                   <p className="text-gray-600 text-sm leading-relaxed">{desc}</p>
                 </div>
               </div>
@@ -84,15 +84,15 @@ export default function UeberUnsPage() {
 
         {/* Team */}
         <section>
-          <h2 className="font-serif text-3xl font-bold text-[#1a3a5c] mb-8">Das Team</h2>
+          <h2 className="font-serif text-3xl font-bold text-[#15803d] mb-8">Das Team</h2>
           <div className="grid sm:grid-cols-3 gap-6">
             {team.map(member => (
-              <div key={member.name} className="bg-white rounded-2xl p-6 shadow-sm border border-[#e8e0d5] text-center">
-                <div className="w-16 h-16 bg-[#d9e4ed] rounded-full mx-auto mb-4 flex items-center justify-center text-[#1a3a5c] text-2xl font-bold font-serif">
+              <div key={member.name} className="bg-white rounded-2xl p-6 shadow-sm border border-[#e5e7eb] text-center">
+                <div className="w-16 h-16 bg-[#86efac] rounded-full mx-auto mb-4 flex items-center justify-center text-[#15803d] text-2xl font-bold font-serif">
                   {member.name[0]}
                 </div>
-                <h3 className="font-semibold text-[#1a3a5c]">{member.name}</h3>
-                <p className="text-[#4a7c59] text-sm mb-3">{member.role}</p>
+                <h3 className="font-semibold text-[#15803d]">{member.name}</h3>
+                <p className="text-[#16a34a] text-sm mb-3">{member.role}</p>
                 <p className="text-gray-600 text-sm leading-relaxed">{member.bio}</p>
               </div>
             ))}

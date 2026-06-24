@@ -21,6 +21,14 @@ export default function PostComposer({ onPost }: Props) {
     textareaRef.current?.focus();
   }
 
+  function insert(snippet: string) {
+    setText((t) => (t + snippet).slice(0, MAX));
+    textareaRef.current?.focus();
+  }
+
+  const emojis = ["😊", "🎉", "👍", "🌿", "📍", "🚲", "⚽", "☕"];
+  const [showEmoji, setShowEmoji] = useState(false);
+
   const len = text.length;
   const remaining = MAX - len;
   const over = remaining < 0;
@@ -44,16 +52,41 @@ export default function PostComposer({ onPost }: Props) {
             className="w-full resize-none text-[15px] text-gray-800 placeholder-gray-400 focus:outline-none bg-transparent leading-snug"
           />
           <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
-            <div className="flex items-center gap-0.5 -ml-1.5">
-              <button className="p-2 text-green-600 hover:bg-green-50 active:bg-green-100 active:scale-90 rounded-full transition-all">
+            <div className="relative flex items-center gap-0.5 -ml-1.5">
+              <button
+                onClick={() => insert(" 📷 [Foto] ")}
+                aria-label="Foto hinzufügen"
+                className="p-2 text-green-600 hover:bg-green-50 active:bg-green-100 active:scale-90 rounded-full transition-all"
+              >
                 <Image className="w-[18px] h-[18px]" />
               </button>
-              <button className="p-2 text-green-600 hover:bg-green-50 active:bg-green-100 active:scale-90 rounded-full transition-all">
+              <button
+                onClick={() => insert(" 📍 Mitte ")}
+                aria-label="Standort hinzufügen"
+                className="p-2 text-green-600 hover:bg-green-50 active:bg-green-100 active:scale-90 rounded-full transition-all"
+              >
                 <MapPin className="w-[18px] h-[18px]" />
               </button>
-              <button className="p-2 text-green-600 hover:bg-green-50 active:bg-green-100 active:scale-90 rounded-full transition-all">
+              <button
+                onClick={() => setShowEmoji((s) => !s)}
+                aria-label="Emoji hinzufügen"
+                className={`p-2 rounded-full transition-all active:scale-90 ${showEmoji ? "bg-green-100 text-green-700" : "text-green-600 hover:bg-green-50 active:bg-green-100"}`}
+              >
                 <Smile className="w-[18px] h-[18px]" />
               </button>
+              {showEmoji && (
+                <div className="absolute top-11 left-0 z-10 bg-white border border-gray-200 rounded-xl shadow-lg p-2 flex flex-wrap gap-1 w-56">
+                  {emojis.map((e) => (
+                    <button
+                      key={e}
+                      onClick={() => { insert(e); setShowEmoji(false); }}
+                      className="text-xl p-1.5 hover:bg-gray-100 rounded-lg active:scale-90 transition-all"
+                    >
+                      {e}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="flex items-center gap-3">
               {/* Circular progress */}

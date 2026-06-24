@@ -17,8 +17,8 @@ const faqItems = [
 
 export default function KontaktPage() {
   return (
-    <div className="min-h-screen bg-[#f8f4ef]">
-      <div className="bg-[#1a3a5c] text-white py-16 px-4">
+    <div className="min-h-screen bg-[#f9fafb]">
+      <div className="bg-[#15803d] text-white py-16 px-4">
         <div className="max-w-3xl mx-auto">
           <h1 className="font-serif text-4xl font-bold mb-3">Kontakt</h1>
           <p className="text-blue-200 text-lg">Wir helfen dir gerne weiter — melde dich jederzeit.</p>
@@ -26,29 +26,29 @@ export default function KontaktPage() {
       </div>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 grid md:grid-cols-2 gap-10">
         <div>
-          <h2 className="font-serif text-2xl font-bold text-[#1a3a5c] mb-6">Schreib uns</h2>
+          <h2 className="font-serif text-2xl font-bold text-[#15803d] mb-6">Schreib uns</h2>
           <ContactForm />
         </div>
         <div className="space-y-6">
-          <div className="bg-white rounded-2xl p-6 border border-[#e8e0d5]">
-            <h3 className="font-semibold text-[#1a3a5c] mb-4">Kontaktdaten</h3>
+          <div className="bg-white rounded-2xl p-6 border border-[#e5e7eb]">
+            <h3 className="font-semibold text-[#15803d] mb-4">Kontaktdaten</h3>
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-sm text-gray-700">
-                <Mail className="w-4 h-4 text-[#4a7c59]" />
+                <Mail className="w-4 h-4 text-[#16a34a]" />
                 hallo@bielefeldspricht.de
               </div>
               <div className="flex items-center gap-3 text-sm text-gray-700">
-                <Phone className="w-4 h-4 text-[#4a7c59]" />
+                <Phone className="w-4 h-4 text-[#16a34a]" />
                 0521 / 123 456 78
               </div>
               <div className="flex items-center gap-3 text-sm text-gray-700">
-                <Clock className="w-4 h-4 text-[#4a7c59]" />
+                <Clock className="w-4 h-4 text-[#16a34a]" />
                 Mo–Fr: 9:00 – 17:00 Uhr
               </div>
             </div>
           </div>
           <div>
-            <h3 className="font-semibold text-[#1a3a5c] mb-4">Häufige Fragen</h3>
+            <h3 className="font-semibold text-[#15803d] mb-4">Häufige Fragen</h3>
             <FAQAccordion items={faqItems} />
           </div>
         </div>

@@ -44,7 +44,18 @@ export default function HomePage() {
   const [newPosts, setNewPosts] = useState<Post[]>([]);
   const [toast, setToast] = useState(false);
   const [newIds, setNewIds] = useState<Set<number>>(new Set());
-  const incomingRef = { current: 0 };
+  const [loadCount, setLoadCount] = useState(0);
+
+  // Older posts that load when "Weitere Beiträge laden" is clicked
+  function loadMore() {
+    const older: Post[] = feedPosts.slice(0, 6).map((p, i) => ({
+      ...p,
+      id: 1000 + loadCount * 100 + i,
+      time: "Vor 1 Tag",
+    }));
+    setPosts((prev) => [...prev, ...older]);
+    setLoadCount((c) => c + 1);
+  }
 
   // Simulate incoming posts after a delay
   useEffect(() => {
@@ -127,7 +138,10 @@ export default function HomePage() {
 
         {/* Load more */}
         <div className="bg-white py-6 text-center border-b border-gray-100">
-          <button className="text-sm text-green-600 font-semibold hover:text-green-700 transition-colors active:scale-95">
+          <button
+            onClick={loadMore}
+            className="text-sm text-green-600 font-semibold hover:text-green-700 transition-colors active:scale-95"
+          >
             Weitere Beiträge laden
           </button>
         </div>

@@ -21,7 +21,7 @@ export default function IssueCard({ issue }: Props) {
   }
 
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#e8e0d5] hover:shadow-md transition-shadow flex flex-col gap-3">
+    <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-200 hover:shadow-md transition-shadow flex flex-col gap-3">
       {/* Header badges */}
       <div className="flex items-center gap-2 flex-wrap">
         <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${categoryColors[issue.category]}`}>
@@ -33,7 +33,7 @@ export default function IssueCard({ issue }: Props) {
       </div>
 
       {/* Title */}
-      <h3 className="font-semibold text-[#1a3a5c] text-base leading-snug">{issue.title}</h3>
+      <h3 className="font-semibold text-gray-900 text-base leading-snug">{issue.title}</h3>
 
       {/* Description */}
       <p className="text-sm text-gray-600 leading-relaxed line-clamp-2">{issue.description}</p>
@@ -51,14 +51,14 @@ export default function IssueCard({ issue }: Props) {
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between pt-1 border-t border-[#f0ebe4]">
+      <div className="flex items-center justify-between pt-1 border-t border-gray-100">
         <span className="text-xs text-gray-400">{issue.date}</span>
         <button
           onClick={toggle}
-          className={`flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-full transition-colors ${
+          className={`flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-full active:scale-95 transition-all ${
             upvoted
-              ? "bg-[#1a3a5c] text-white"
-              : "bg-[#f0f4f8] text-[#1a3a5c] hover:bg-[#d9e4ed]"
+              ? "bg-green-600 text-white"
+              : "bg-green-50 text-green-700 hover:bg-green-100"
           }`}
         >
           <ThumbsUp className="w-3.5 h-3.5" />
